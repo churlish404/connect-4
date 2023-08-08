@@ -2,10 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 // COLOURS
+
 // shades
 $color-white: #ffffff;
 $color-black: #030303;
 $color-gray: #d4d4d4;
+
 // background colours
 $color-light: #bfdbed;
 $color-mid: #80b8db;
@@ -13,4 +15,6 @@ $color-dark: #368abf;
 
 // token colours
 $color-player1: #d12424;
-$color-player2: #f8f22f;
+$color-player1--accent: #e46262;
+$color-player2: #ece509;
+$color-player2--accent: #f9f462;

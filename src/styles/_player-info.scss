@@ -1,0 +1,41 @@
+.game {
+  &__playerInfo {
+    margin-inline: 1rem;
+    height: 20vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  &__player1,
+  &__player2 {
+    border: black dashed 3px;
+    padding: 0.5em 1em;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__token {
+    width: 2rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+
+    &--red {
+      outline: solid 1px $color-player1;
+      background-color: $color-player1;
+      background: radial-gradient(
+        $color-player1 1em,
+        $color-player1--accent 1.2em
+      );
+    }
+    &--yellow {
+      outline: solid 2px $color-player2;
+      background-color: $color-player2;
+      background: radial-gradient(
+        $color-player2 1em,
+        $color-player2--accent 1.2em
+      );
+    }
+  }
+}

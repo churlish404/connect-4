@@ -1,13 +1,20 @@
 @use "./resets";
 @use "./variables" as *;
+@use "./player-info";
+.header {
+  background-color: $color-mid;
+  color: $color-white;
+  font-size: 1.5rem;
+  -webkit-text-fill-color: $color-dark;
+  -webkit-text-stroke: 1px;
+}
 
 .game {
   height: 100vh;
   background-image: linear-gradient(120deg, $color-light, $color-mid);
-
-  .game__playerInfo {
-    height: 20vh;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   .grid {
     display: grid;
@@ -22,25 +29,40 @@
       gap: 1rem;
 
       .window {
-        height: 6vh;
+        height: 4vh;
         background-color: $color-gray;
+      }
+      .red-token {
+        background-color: $color-player1;
+      }
+      .yellow-token {
+        background-color: $color-player2;
       }
     }
   }
-  .game__board {
-    height: 50vh;
+
+  &__board {
+    height: 40vh;
     background-color: $color-mid;
     margin: 0 1rem;
     outline: solid;
+    box-shadow: 0 3px 0 $color-black, 5px -5px 2px 2px $color-black;
+    // position: relative;
 
-    .game__board::after {
-      content: "";
-      width: 40px;
-      height: 50px;
-    }
+    // &::after {
+    //   content: "";
+    //   width: 105%;
+    //   display: block;
+    //   height: 105%;
+    //   background-color: red;
+    //   opacity: 10;
+    //   position: absolute;
+    //   // z-index: -1;
+    //   left: 50%;
+    // }
 
     .window {
-      box-shadow: inset 0 0 0 2px $color-dark;
+      box-shadow: inset 3px 3px 0 2px $color-black, inset 0 0 0 1px $color-black;
       border-radius: 50%;
       background-color: $color-white;
     }

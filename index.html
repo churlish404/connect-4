@@ -6,9 +6,23 @@
     <title>Connect 4</title>
   </head>
   <body>
+    <header class="header">
+      <h1>Connect=>4</h1>
+    </header>
     <main id="game-wrapper" class="game">
-      <section id="player-info" class="game__playerInfo"></section>
+      <section class="game__playerInfo">
+        <div class="game__player1">
+          Player 1
+          <div class="game__token game__token--red"></div>
+        </div>
+      </section>
       <section class="game__board grid"></section>
+      <section class="game__playerInfo">
+        <div class="game__player2">
+          Player 2
+          <div class="game__token game__token--yellow"></div>
+        </div>
+      </section>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
