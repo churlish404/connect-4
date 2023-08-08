@@ -7,6 +7,12 @@
   font-size: 1.5rem;
   -webkit-text-fill-color: $color-dark;
   -webkit-text-stroke: 1px;
+  .game-info {
+    padding-top: 0.5em;
+    width: 50%;
+    height: 15vh;
+    display: inline-block;
+  }
 }
 
 .game {
