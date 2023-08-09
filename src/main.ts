@@ -41,7 +41,7 @@ const createGridHTML = () => {
     // create column container div
 
     const columnHTML = document.createElement("div");
-    columnHTML.classList.add("column", `column${col + 1}`);
+    columnHTML.classList.add("column", `column${col}`);
     // adding event listener to each column so that user can click on column
     columnHTML.addEventListener("click", addToken);
 
@@ -61,41 +61,49 @@ const createGridHTML = () => {
 // initialising JS grid
 const createGrid = () => {
   board = [];
-  for (let row = 0; row < 6; row++) {
-    const column = [];
-    for (let col = 0; col <= 6; col++) {
-      column.push(" ");
+  for (let col = 0; col < 6; col++) {
+    const rowArr = [];
+    for (let row = 0; row <= 6; row++) {
+      rowArr.push(" ");
     }
     // add column array to board to setup [[],[]] structure
-    board.push(column);
+    board.push(rowArr);
   }
 };
 
-// help needed here!
-// issue with trying to refactor addToken();
+const setWindowStyle = (window: Element) => {
+  window.classList.add("filled");
+  console.log(window);
+  const windowColumn = parseInt(window.id.split(":")[1]);
+  const windowRow = parseInt(window.id.split(":")[0]);
 
-// const setWindowStyle = (window: Element) => {
-//   window.classList.add("filled");
-
-//   if (currentPlayer == "red") {
-//     window.classList.add("red-token");
-//     currentPlayer = player2;
-//   } else {
-//     window.classList.add("yellow-token");
-//     currentPlayer = player1;
-//   }
-// };
+  //adding style class to html window depending on who's turn it is
+  // alternate by switching who current player is immediately after
+  if (currentPlayer == "red") {
+    window.classList.add("red-token");
+    board[windowColumn][windowRow] = player1;
+    currentPlayer = player2;
+  } else {
+    window.classList.add("yellow-token");
+    board[windowColumn][windowRow] = player2;
+    currentPlayer = player1;
+  }
+  console.log(board);
+};
 
 const addToken = (event: Event) => {
+  // return out of function early as don't want to allow players to add tokens if game is over
+  // if (checkWinner()) {
+  //   return;
+  // }
   const column = event.currentTarget as HTMLElement;
   const windows = Array.from(column.children);
 
+  // to store coordinates of filled token on column & flag if column is empty
   let activeWindow = {
     isFilled: false,
     coordinates: "",
   };
-  // let coordinates: string[];
-  // const columnNumber = column.classList[1][column.classList[1].length - 1];
 
   // // checking for existing filled windows in column
   windows.forEach((window: any) => {
@@ -109,46 +117,34 @@ const addToken = (event: Event) => {
   // if active window object has no coords set - aka no tokens in this column
   // add a filled class to the bottom window
   if (!activeWindow.coordinates) {
-    /*ignore trying to refactor below code into setWindowStyle()
-    // setWindowStyle(windows[windows.length]);
-    ignore */
-
     windows[windows.length - 1].classList.add("filled");
+    setWindowStyle(windows[windows.length - 1]);
 
-    //adding style class to html window depending on who's turn it is
-    // alternate by switching who current player is immediately after
-    if (currentPlayer == "red") {
-      windows[windows.length - 1].classList.add("red-token");
-      currentPlayer = player2;
-    } else {
-      windows[windows.length - 1].classList.add("yellow-token");
-      currentPlayer = player1;
-    }
     // if the active window object already has coords aka theres already tokens in column
-    // get coords for next window "up" column so can stack next token
-    // set token to those coords
   } else {
-    // working here to alter next line down so next row is initialised dynamically (instead of -1 should be -number of filled rows)
+    // getting number of rows in this column where window is filled
     const filledRows = windows.filter((row) => {
       return row.classList.contains("filled");
     });
-
     const numberOfFilledRows = filledRows.length;
-    const nextRow: number =
+    //
+    const nextAvailableRow: number =
       parseInt(activeWindow.coordinates[1]) - numberOfFilledRows;
 
-    /* ignore trying to refactor below code into setWindowStyle function()
-    setWindowStyle(windows[nextRow]);
-  ignore */
-
-    windows[nextRow].classList.add("filled");
-
-    if (currentPlayer == "red") {
-      windows[nextRow].classList.add("red-token");
-      currentPlayer = player2;
-    } else {
-      windows[nextRow].classList.add("yellow-token");
-      currentPlayer = player1;
-    }
+    windows[nextAvailableRow].classList.add("filled");
+    setWindowStyle(windows[nextAvailableRow]);
   }
+};
+
+const checkWinner = () => {
+  // check horizontal "connect-4"
+  // check vertical "connect-4"
+  // check diagonal "connect-4"
+  // check reverse diagonal "connect-4"
+  // if connect-4 found
+  // isGameOver = true;
+  // return isGameOver;
+  // else {
+  //   return false;
+  // }
 };
