@@ -5,6 +5,8 @@ import "./styles/main.scss";
 // variables
 const player1 = "red";
 const player2 = "yellow";
+const rows = 6;
+const columns = 7;
 let board: string[][];
 let currentPlayer: string;
 let isGameOver: boolean = false;
@@ -73,29 +75,34 @@ const createGrid = () => {
 
 const setWindowStyle = (window: Element) => {
   window.classList.add("filled");
-  console.log(window);
   const windowColumn = parseInt(window.id.split(":")[1]);
   const windowRow = parseInt(window.id.split(":")[0]);
 
   //adding style class to html window depending on who's turn it is
-  // alternate by switching who current player is immediately after
+  // check if winning move made
+  // if game not won change who current player is
   if (currentPlayer == "red") {
     window.classList.add("red-token");
     board[windowColumn][windowRow] = player1;
+    if (checkForWinner()) {
+      gameOver();
+    }
     currentPlayer = player2;
   } else {
     window.classList.add("yellow-token");
     board[windowColumn][windowRow] = player2;
+    if (checkForWinner()) {
+      gameOver();
+    }
     currentPlayer = player1;
   }
-  console.log(board);
 };
 
 const addToken = (event: Event) => {
   // return out of function early as don't want to allow players to add tokens if game is over
-  // if (checkWinner()) {
-  //   return;
-  // }
+  if (isGameOver) {
+    return;
+  }
   const column = event.currentTarget as HTMLElement;
   const windows = Array.from(column.children);
 
@@ -136,15 +143,118 @@ const addToken = (event: Event) => {
   }
 };
 
-const checkWinner = () => {
+const horizontalAdjacentTokens = (
+  board: string[][],
+  row: number,
+  col: number
+) => {
+  let adjacentTokens = 0;
+  for (let i = 1; i < 4; i++) {
+    if (board[row][col] == board[row][col + i]) {
+      adjacentTokens++;
+    } else {
+      return false;
+    }
+  }
+  return true;
+};
+
+const verticalAdjacentTokens = (
+  board: string[][],
+  row: number,
+  col: number
+) => {
+  let adjacentTokens = 0;
+  for (let i = 1; i < 4; i++) {
+    if (board[row][col] == board[row + i][col]) {
+      adjacentTokens++;
+    } else return false;
+  }
+  return true;
+};
+
+const diagonalAdjacentTokens = (
+  board: string[][],
+  row: number,
+  col: number
+) => {
+  let adjacentTokens = 0;
+  for (let i = 1; i < 4; i++) {
+    if (board[row][col] == board[row - i][col + i]) {
+      adjacentTokens++;
+    } else return false;
+  }
+  return true;
+};
+
+const antiDiagonalAdjacentTokens = (
+  board: string[][],
+  row: number,
+  col: number
+) => {
+  let adjacentTokens = 0;
+  for (let i = 1; i < 4; i++) {
+    if (board[row][col] == board[row + i][col + i]) {
+      adjacentTokens++;
+    } else return false;
+  }
+  return true;
+};
+
+const checkForWinner = (): boolean => {
   // check horizontal "connect-4"
+  // columns - 3 to
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns - 3; col++) {
+      // if window isn't empty check for horizontal win horizontally
+      if (board[row][col] != " ") {
+        if (horizontalAdjacentTokens(board, row, col)) {
+          return true;
+        }
+      }
+    }
+  }
   // check vertical "connect-4"
+  for (let col = 0; col < columns; col++) {
+    for (let row = 0; row < rows - 3; row++) {
+      // if window isn't empty check for horizontal win horizontally
+      if (board[row][col] != " ") {
+        if (verticalAdjacentTokens(board, row, col)) {
+          return true;
+        }
+      }
+    }
+  }
   // check diagonal "connect-4"
+  // don't need to check all of board as some diagonals wont allow connect 4
+  for (let row = 5; row > rows - 3; row--) {
+    for (let col = 0; col < columns - 4; col++) {
+      if (board[row][col] != " ") {
+        if (diagonalAdjacentTokens(board, row, col)) {
+          return true;
+        }
+      }
+    }
+  }
+
   // check reverse diagonal "connect-4"
+  for (let row = 0; row < rows - 3; row++) {
+    for (let col = 0; col < columns - 4; col++) {
+      if (board[row][col] != " ") {
+        if (antiDiagonalAdjacentTokens(board, row, col)) {
+          return true;
+        }
+      }
+    }
+  }
   // if connect-4 found
   // isGameOver = true;
   // return isGameOver;
   // else {
-  //   return false;
+  return false;
   // }
+};
+
+const gameOver = () => {
+  console.log(`${currentPlayer} wins`);
 };
