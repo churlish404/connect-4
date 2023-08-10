@@ -1,15 +1,34 @@
 // imports
-
+import confetti, { Options } from "canvas-confetti";
 import "./styles/main.scss";
 
 // variables
-const player1 = "red";
-const player2 = "yellow";
+const player1 = "Red";
+const player2 = "Yellow";
 const rows = 6;
 const columns = 7;
 let board: string[][];
 let currentPlayer: string;
 let isGameOver: boolean = false;
+
+const options1: Options = {
+  particleCount: 100,
+  spread: 50,
+  colors: ["#3BCF07"],
+  angle: 90,
+};
+const options2: Options = {
+  particleCount: 200,
+  spread: 200,
+  colors: ["#ffffff"],
+  angle: 120,
+};
+const options3: Options = {
+  particleCount: 300,
+  spread: 200,
+  colors: ["#E54831"],
+  angle: 180,
+};
 
 // HTML elements
 const boardHTML = document.querySelector(".game__board");
@@ -40,9 +59,9 @@ window.onload = () => {
 };
 
 const coinFlip = () => {
-  let players = ["red", "yellow"];
+  let players = ["Red", "Yellow"];
   const startingPlayer = players[Math.round(Math.random())];
-  gameInfo.innerHTML = `${startingPlayer} to play first!`;
+  gameInfo.innerHTML = `The virtual coin has spoken ${startingPlayer} to play first!`;
   return startingPlayer;
 };
 
@@ -68,7 +87,7 @@ const createGridHTML = () => {
   }
 };
 
-// to update turn information and style graphics appropriately
+// to update turn information and style graphics appropriatelyPa
 const updatePlayerDisplay = (currentPlayer: string) => {
   gameInfo.innerHTML = `${currentPlayer} to play`;
   if (currentPlayer == "red") {
@@ -94,17 +113,28 @@ const createGrid = () => {
   }
 };
 
+const setWinnerStyles = (winningCoordsArray: string[]) => {
+  console.log(winningCoordsArray);
+  winningCoordsArray.forEach((coord) => {
+    const window = document.getElementById(`${coord[1]}:${coord[0]}`);
+    window!.style.scale = "1.25";
+    window!.style.gap = "110%";
+  });
+  return;
+};
+
 const setWindowStyle = (window: Element) => {
   window.classList.add("filled");
   const windowColumn = parseInt(window.id.split(":")[1]);
   const windowRow = parseInt(window.id.split(":")[0]);
 
   //adding style class to html window depending on who's turn it is
-  // check if winning move made
-  // if game not won change who current player is
-  if (currentPlayer == "red") {
+
+  if (currentPlayer == "Red") {
     window.classList.add("red-token");
+    // set piece in js array
     board[windowColumn][windowRow] = player1;
+    // check if winning move made
     if (checkForWinner()) {
       gameOver();
       return;
@@ -121,6 +151,7 @@ const setWindowStyle = (window: Element) => {
   }
   // update game info div
   updatePlayerDisplay(currentPlayer);
+  console.log(board);
 };
 
 const addToken = (event: Event) => {
@@ -221,19 +252,27 @@ const antiDiagonalAdjacentTokens = (
   for (let i = 1; i < 4; i++) {
     if (board[row][col] == board[row + i][col + i]) {
       adjacentTokens++;
+      console.log(adjacentTokens);
     } else return false;
   }
+
   return true;
 };
 
 const checkForWinner = (): boolean => {
   // check horizontal "connect-4"
-  // columns - 3 to
+  // columns - 3 to stop going out of bounds
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < columns - 3; col++) {
       // if window isn't empty check for horizontal win horizontally
       if (board[row][col] != " ") {
         if (horizontalAdjacentTokens(board, row, col)) {
+          setWinnerStyles([
+            `${row}${col}`,
+            `${row}${col + 1}`,
+            `${row}${col + 2}`,
+            `${row}${col + 3}`,
+          ]);
           return true;
         }
       }
@@ -245,6 +284,12 @@ const checkForWinner = (): boolean => {
       // if window isn't empty check for horizontal win horizontally
       if (board[row][col] != " ") {
         if (verticalAdjacentTokens(board, row, col)) {
+          setWinnerStyles([
+            `${row}${col}`,
+            `${row + 1}${col}`,
+            `${row + 2}${col}`,
+            `${row + 3}${col}`,
+          ]);
           return true;
         }
       }
@@ -253,9 +298,15 @@ const checkForWinner = (): boolean => {
   // check diagonal "connect-4"
   // don't need to check all of board as some diagonals wont allow connect 4
   for (let row = 5; row > rows - 3; row--) {
-    for (let col = 0; col < columns - 4; col++) {
+    for (let col = 0; col < columns - 3; col++) {
       if (board[row][col] != " ") {
         if (diagonalAdjacentTokens(board, row, col)) {
+          setWinnerStyles([
+            `${row}${col}`,
+            `${row - 1}${col + 1}`,
+            `${row - 2}${col + 2}`,
+            `${row - 3}${col + 3}`,
+          ]);
           return true;
         }
       }
@@ -264,23 +315,49 @@ const checkForWinner = (): boolean => {
 
   // check reverse diagonal "connect-4"
   for (let row = 0; row < rows - 3; row++) {
-    for (let col = 0; col < columns - 4; col++) {
+    for (let col = 0; col < columns - 3; col++) {
       if (board[row][col] != " ") {
         if (antiDiagonalAdjacentTokens(board, row, col)) {
+          setWinnerStyles(
+            [
+              `${row}${col}`,
+              `${row + 1}${col + 1}`,
+              `${row + 2}${col + 2}`,
+              `${row + 3}${col + 3}`,
+            ],
+            true
+          );
           return true;
         }
       }
     }
   }
-  // if connect-4 found
-  // isGameOver = true;
-  // return isGameOver;
-  // else {
   return false;
-  // }
 };
 
+// const resetGame = () => {
+//   location.reload();
+// };
+
 const gameOver = () => {
-  gameInfo.innerHTML = `${currentPlayer} wins`;
+  gameInfo.innerHTML = `${currentPlayer} wins!`;
+  isGameOver = true;
+  fireConfetti();
+  // setTimeout(() => {
+  //   resetGame();
+  // }, 3000);
+
   return;
+};
+
+const fireConfetti = () => {
+  confetti(options1);
+
+  setTimeout(() => {
+    confetti(options2);
+  }, 500);
+
+  setTimeout(() => {
+    confetti(options3);
+  }, 700);
 };
