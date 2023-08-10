@@ -14,6 +14,8 @@ let isGameOver: boolean = false;
 // HTML elements
 const boardHTML = document.querySelector(".game__board");
 const gameInfo = document.querySelector(".game-info");
+const player1Graphic = document.querySelector(".game__player1") as HTMLElement;
+const player2Graphic = document.querySelector(".game__player2") as HTMLElement;
 
 // Null checks
 if (!boardHTML) {
@@ -21,6 +23,12 @@ if (!boardHTML) {
 }
 if (!gameInfo) {
   throw new Error("Issue with gameInfo selector");
+}
+if (!player1Graphic) {
+  throw new Error("Issue with player1 info selector");
+}
+if (!player2Graphic) {
+  throw new Error("Issue with player2 info selector");
 }
 
 // functions
@@ -60,6 +68,19 @@ const createGridHTML = () => {
   }
 };
 
+// to update turn information and style graphics appropriately
+const updatePlayerDisplay = (currentPlayer: string) => {
+  gameInfo.innerHTML = `${currentPlayer} to play`;
+  if (currentPlayer == "red") {
+    player1Graphic.style.opacity = "1";
+    player2Graphic.style.opacity = "0.5";
+  } else {
+    player1Graphic.style.opacity = "0.5";
+    player2Graphic.style.opacity = "1";
+  }
+  return;
+};
+
 // initialising JS grid
 const createGrid = () => {
   board = [];
@@ -86,6 +107,7 @@ const setWindowStyle = (window: Element) => {
     board[windowColumn][windowRow] = player1;
     if (checkForWinner()) {
       gameOver();
+      return;
     }
     currentPlayer = player2;
   } else {
@@ -93,9 +115,12 @@ const setWindowStyle = (window: Element) => {
     board[windowColumn][windowRow] = player2;
     if (checkForWinner()) {
       gameOver();
+      return;
     }
     currentPlayer = player1;
   }
+  // update game info div
+  updatePlayerDisplay(currentPlayer);
 };
 
 const addToken = (event: Event) => {
@@ -256,5 +281,6 @@ const checkForWinner = (): boolean => {
 };
 
 const gameOver = () => {
-  console.log(`${currentPlayer} wins`);
+  gameInfo.innerHTML = `${currentPlayer} wins`;
+  return;
 };

@@ -1,23 +1,33 @@
 @use "./resets";
 @use "./variables" as *;
 @use "./player-info";
+
+#page {
+  background-image: linear-gradient(
+    120deg,
+    $color-black,
+    $color-dark,
+    $color-purple
+  );
+}
 .header {
-  background-color: $color-mid;
+  padding-top: 1em;
   color: $color-white;
   font-size: 1.5rem;
   -webkit-text-fill-color: $color-dark;
   -webkit-text-stroke: 1px;
   .game-info {
-    padding-top: 0.5em;
+    padding-top: 1.5em;
+    font-size: 1.5rem;
     width: 50%;
-    height: 15vh;
+    height: 10vh;
     display: inline-block;
+    color: $color-game-info;
   }
 }
 
 .game {
   height: 100vh;
-  background-image: linear-gradient(120deg, $color-light, $color-mid);
   display: flex;
   flex-direction: column;
 
@@ -32,6 +42,11 @@
       flex-direction: column;
       justify-content: center;
       gap: 1rem;
+
+      .filled {
+        filter: none;
+        border: $color-black;
+      }
 
       .window {
         height: 4vh;
@@ -48,28 +63,39 @@
 
   &__board {
     height: 40vh;
-    background-color: $color-mid;
+    background-color: $color-board;
     margin: 0 1rem;
-    outline: solid;
-    box-shadow: 0 3px 0 $color-black, 5px -5px 2px 2px $color-black;
-    // position: relative;
+    border: solid white;
+    box-shadow: 5px -5px 2px $color-black;
+    position: relative;
 
+    &::before {
+      content: "";
+      width: 100%;
+      display: block;
+      height: 10%;
+      background-color: $color-board;
+      border-radius: 10px;
+      opacity: 0.5;
+      position: absolute;
+      z-index: -1;
+      top: -10%;
+    }
+    // work in progress to build board legs
     // &::after {
     //   content: "";
-    //   width: 105%;
+    //   background-color: white;
+    //   width: 100%;
+    //   height: 10%;
     //   display: block;
-    //   height: 105%;
-    //   background-color: red;
-    //   opacity: 10;
     //   position: absolute;
-    //   // z-index: -1;
-    //   left: 50%;
+    //   bottom: -10%;
     // }
 
     .window {
-      box-shadow: inset 3px 3px 0 2px $color-black, inset 0 0 0 1px $color-black;
+      filter: drop-shadow(-4px 4px 0 $color-dark);
       border-radius: 50%;
-      background-color: $color-white;
+      background-color: $color-dark;
     }
   }
 }
