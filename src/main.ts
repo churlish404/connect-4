@@ -33,6 +33,7 @@ const options3: Options = {
 // HTML elements
 const boardHTML = document.querySelector(".game__board");
 const gameInfo = document.querySelector(".game-info");
+const resetButton = document.querySelector(".reset-button");
 const player1Graphic = document.querySelector(".game__player1") as HTMLElement;
 const player2Graphic = document.querySelector(".game__player2") as HTMLElement;
 
@@ -49,6 +50,9 @@ if (!player1Graphic) {
 if (!player2Graphic) {
   throw new Error("Issue with player2 info selector");
 }
+if (!resetButton) {
+  throw new Error("Issue with reset-button selector");
+}
 
 // functions
 window.onload = () => {
@@ -58,11 +62,25 @@ window.onload = () => {
   currentPlayer = coinFlip();
 };
 
+// functions to update styles
 const coinFlip = () => {
   let players = ["Red", "Yellow"];
   const startingPlayer = players[Math.round(Math.random())];
   gameInfo.innerHTML = `The virtual coin has spoken ${startingPlayer} to play first!`;
   return startingPlayer;
+};
+
+// to update turn information and style graphics appropriatelyPa
+const updatePlayerDisplay = (currentPlayer: string) => {
+  gameInfo.innerHTML = `${currentPlayer} to play`;
+  if (currentPlayer == "red") {
+    player1Graphic.style.opacity = "1";
+    player2Graphic.style.opacity = "0.5";
+  } else {
+    player1Graphic.style.opacity = "0.5";
+    player2Graphic.style.opacity = "1";
+  }
+  return;
 };
 
 const createGridHTML = () => {
@@ -84,32 +102,6 @@ const createGridHTML = () => {
     }
     // add each column div to HTML board
     boardHTML.appendChild(columnHTML);
-  }
-};
-
-// to update turn information and style graphics appropriatelyPa
-const updatePlayerDisplay = (currentPlayer: string) => {
-  gameInfo.innerHTML = `${currentPlayer} to play`;
-  if (currentPlayer == "red") {
-    player1Graphic.style.opacity = "1";
-    player2Graphic.style.opacity = "0.5";
-  } else {
-    player1Graphic.style.opacity = "0.5";
-    player2Graphic.style.opacity = "1";
-  }
-  return;
-};
-
-// initialising JS grid
-const createGrid = () => {
-  board = [];
-  for (let col = 0; col < 6; col++) {
-    const rowArr = [];
-    for (let row = 0; row <= 6; row++) {
-      rowArr.push(" ");
-    }
-    // add column array to board to setup [[],[]] structure
-    board.push(rowArr);
   }
 };
 
@@ -152,6 +144,21 @@ const setWindowStyle = (window: Element) => {
   // update game info div
   updatePlayerDisplay(currentPlayer);
   console.log(board);
+};
+
+// functions to perform logic
+
+// initialising JS grid
+const createGrid = () => {
+  board = [];
+  for (let col = 0; col < 6; col++) {
+    const rowArr = [];
+    for (let row = 0; row <= 6; row++) {
+      rowArr.push(" ");
+    }
+    // add column array to board to setup [[],[]] structure
+    board.push(rowArr);
+  }
 };
 
 const addToken = (event: Event) => {
@@ -335,21 +342,6 @@ const checkForWinner = (): boolean => {
   return false;
 };
 
-// const resetGame = () => {
-//   location.reload();
-// };
-
-const gameOver = () => {
-  gameInfo.innerHTML = `${currentPlayer} wins!`;
-  isGameOver = true;
-  fireConfetti();
-  // setTimeout(() => {
-  //   resetGame();
-  // }, 3000);
-
-  return;
-};
-
 const fireConfetti = () => {
   confetti(options1);
 
@@ -361,3 +353,21 @@ const fireConfetti = () => {
     confetti(options3);
   }, 700);
 };
+
+const resetGame = () => {
+  location.reload();
+};
+
+const gameOver = () => {
+  gameInfo.innerHTML = `${currentPlayer} wins!`;
+  isGameOver = true;
+  fireConfetti();
+  setTimeout(() => {
+    resetGame();
+  }, 5000);
+
+  return;
+};
+
+// event listeners
+resetButton.addEventListener("click", resetGame);

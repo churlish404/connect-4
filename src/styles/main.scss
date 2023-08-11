@@ -24,6 +24,17 @@
     display: inline-block;
     color: $color-game-info;
   }
+  .reset-button {
+    padding: 0.5em 1em;
+    border: 2px $color-purple solid;
+    border-radius: 15px;
+    background-color: $color-game-info;
+    color: $color-purple;
+  }
+  .reset-button:hover {
+    color: $color-white;
+    border: 2px $color-white solid;
+  }
 }
 
 .game {
