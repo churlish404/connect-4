@@ -327,15 +327,12 @@ const checkForWinner = (): boolean => {
     for (let col = 0; col < columns - 3; col++) {
       if (board[row][col] != " ") {
         if (antiDiagonalAdjacentTokens(board, row, col)) {
-          setWinnerStyles(
-            [
-              `${row}${col}`,
-              `${row + 1}${col + 1}`,
-              `${row + 2}${col + 2}`,
-              `${row + 3}${col + 3}`,
-            ],
-            true
-          );
+          setWinnerStyles([
+            `${row}${col}`,
+            `${row + 1}${col + 1}`,
+            `${row + 2}${col + 2}`,
+            `${row + 3}${col + 3}`,
+          ]);
           return true;
         }
       }
