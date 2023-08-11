@@ -33,3 +33,16 @@
     border: 2px $color-white solid;
   }
 }
+@media only screen and (min-width: 768px) {
+  .header {
+    &__elements {
+      max-width: 768px;
+      margin: 2rem auto;
+    }
+  }
+  .game {
+    &__playerInfo {
+      gap: 10rem;
+    }
+  }
+}

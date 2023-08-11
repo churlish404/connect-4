@@ -140,7 +140,6 @@ const setWindowStyle = (window: Element) => {
   updatePlayerDisplay(currentPlayer);
 };
 const setWinnerStyles = (winningCoordsArray: string[]) => {
-  console.log(winningCoordsArray);
   winningCoordsArray.forEach((coord) => {
     const window = document.getElementById(`${coord[1]}:${coord[0]}`);
     window!.style.scale = "1.25";
