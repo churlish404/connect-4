@@ -8,8 +8,10 @@
   <body id="page">
     <header class="header">
       <h1>Connect => 4</h1>
-      <h2 class="game-info"></h2>
-      <button class="reset-button">Reset Game</button>
+      <div class="header__elements">
+        <h2 class="header__game-info"></h2>
+        <button class="header__reset-button">Reset Game</button>
+      </div>
     </header>
     <main id="game-wrapper" class="game">
       <section class="game__playerInfo">
@@ -17,13 +19,12 @@
           Player 1
           <div class="game__token game__token--red"></div>
         </div>
-      </section>
-      <section class="game__board grid"></section>
-      <section class="game__playerInfo">
         <div class="game__player2">
           Player 2
           <div class="game__token game__token--yellow"></div>
         </div>
+      </section>
+      <section class="game__board grid"></section>
       </section>
     </main>
     <script type="module" src="/src/main.ts"></script>

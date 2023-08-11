@@ -1,0 +1,9 @@
+@use "./variables" as *;
+#page {
+  background-image: linear-gradient(
+    120deg,
+    $color-black,
+    $color-dark,
+    $color-purple
+  );
+}

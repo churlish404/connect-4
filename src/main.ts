@@ -11,6 +11,7 @@ let board: string[][];
 let currentPlayer: string;
 let isGameOver: boolean = false;
 
+// confetti option parameter objects
 const options1: Options = {
   particleCount: 100,
   spread: 50,
@@ -32,8 +33,8 @@ const options3: Options = {
 
 // HTML elements
 const boardHTML = document.querySelector(".game__board");
-const gameInfo = document.querySelector(".game-info");
-const resetButton = document.querySelector(".reset-button");
+const gameInfo = document.querySelector(".header__game-info");
+const resetButton = document.querySelector(".header__reset-button");
 const player1Graphic = document.querySelector(".game__player1") as HTMLElement;
 const player2Graphic = document.querySelector(".game__player2") as HTMLElement;
 
@@ -70,15 +71,19 @@ const coinFlip = () => {
   return startingPlayer;
 };
 
-// to update turn information and style graphics appropriatelyPa
+// to update turn information and style graphics appropriately
 const updatePlayerDisplay = (currentPlayer: string) => {
   gameInfo.innerHTML = `${currentPlayer} to play`;
-  if (currentPlayer == "red") {
+  if (currentPlayer == "Red") {
     player1Graphic.style.opacity = "1";
+    player1Graphic.style.scale = "1.25";
     player2Graphic.style.opacity = "0.5";
+    player2Graphic.style.scale = "1";
   } else {
     player1Graphic.style.opacity = "0.5";
+    player1Graphic.style.scale = "1";
     player2Graphic.style.opacity = "1";
+    player2Graphic.style.scale = "1.25";
   }
   return;
 };
@@ -103,16 +108,6 @@ const createGridHTML = () => {
     // add each column div to HTML board
     boardHTML.appendChild(columnHTML);
   }
-};
-
-const setWinnerStyles = (winningCoordsArray: string[]) => {
-  console.log(winningCoordsArray);
-  winningCoordsArray.forEach((coord) => {
-    const window = document.getElementById(`${coord[1]}:${coord[0]}`);
-    window!.style.scale = "1.25";
-    window!.style.gap = "110%";
-  });
-  return;
 };
 
 const setWindowStyle = (window: Element) => {
@@ -143,7 +138,15 @@ const setWindowStyle = (window: Element) => {
   }
   // update game info div
   updatePlayerDisplay(currentPlayer);
-  console.log(board);
+};
+const setWinnerStyles = (winningCoordsArray: string[]) => {
+  console.log(winningCoordsArray);
+  winningCoordsArray.forEach((coord) => {
+    const window = document.getElementById(`${coord[1]}:${coord[0]}`);
+    window!.style.scale = "1.25";
+    window!.style.gap = "110%";
+  });
+  return;
 };
 
 // functions to perform logic
@@ -370,4 +373,9 @@ const gameOver = () => {
 };
 
 // event listeners
+
 resetButton.addEventListener("click", resetGame);
+
+// lock screen orientation
+
+screen.orientation.lock("portrait");
